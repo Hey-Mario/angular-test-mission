@@ -12,8 +12,7 @@ import { INITIAL_EVENTS, createEventId } from 'src/shared/utils/event-utils';
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent {
-  drawerVisible = true;
-  calendarVisible = true;
+  isCollapsed = true;
   calendarOptions: CalendarOptions = {
     plugins: [
       interactionPlugin,
@@ -42,13 +41,9 @@ export class CalendarComponent {
     eventRemove:
     */
   };
-  currentEvents: EventApi[] = [];
+  currentTasks: EventApi[] = [];
 
   constructor(private changeDetector: ChangeDetectorRef) {
-  }
-
-  handleCalendarToggle() {
-    this.calendarVisible = !this.calendarVisible;
   }
 
   handleWeekendsToggle() {
@@ -80,16 +75,16 @@ export class CalendarComponent {
   }
 
   handleEvents(events: EventApi[]) {
-    this.currentEvents = events;
+    this.currentTasks = events;
     this.changeDetector.detectChanges();
   }
 
   closeDrawer() {
-    this.drawerVisible = false;
+    this.isCollapsed = false;
   }
 
   openDrawer() {
-    this.drawerVisible = true;
-    console.log(this.drawerVisible)
+    this.isCollapsed = true;
+    console.log(this.isCollapsed)
   }
 }

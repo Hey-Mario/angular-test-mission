@@ -8,7 +8,7 @@ import { CalendarOptions, EventApi } from '@fullcalendar/core';
 })
 export class CalendarInfoSettingComponent implements OnInit {
   @Output() toggleWeekends = new EventEmitter()
-  @Input() currentEvents: EventApi[] = [];
+  @Input() currentTasks: EventApi[] = [];
   @Input() calendarOptions: CalendarOptions = {
     weekends: true
   }

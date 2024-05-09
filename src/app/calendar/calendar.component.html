@@ -1,10 +1,15 @@
 
-<div class='demo-app'>
+<div class='main-container'>
+  <button
+    nz-button
+    nzType="primary"
+    (click)="openDrawer()"
+    class="btn-trigger"
+  >Open Settings</button>
 
-  <button nz-button nzType="primary" (click)="openDrawer()">Open</button>
   <nz-drawer
     [nzClosable]="true"
-    [(nzVisible)]="drawerVisible"
+    [(nzVisible)]="isCollapsed"
     [nzPlacement]="'left'"
     nzTitle="Calendar settings"
     (nzOnClose)="closeDrawer()"
@@ -12,19 +17,49 @@
     <ng-container *nzDrawerContent>
       <app-calendar-info-setting
         [calendarOptions]="calendarOptions"
-        [currentEvents]="currentEvents"
+        [currentTasks]="currentTasks"
         (toggleWeekends)="handleWeekendsToggle()"
       ></app-calendar-info-setting>
     </ng-container>
   </nz-drawer>
 
-  <div class='demo-app-main'>
-    <full-calendar *ngIf='calendarVisible' [options]='calendarOptions'>
+  <div class='calendar-container'>
+    <full-calendar [options]='calendarOptions'>
       <ng-template #eventContent let-arg>
         <b>{{ arg.timeText }}</b>
         <i>{{ arg.event.title }}</i>
       </ng-template>
     </full-calendar>
   </div>
-
 </div>
+
+<!-- <nz-layout>
+  <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
+    <app-calendar-info-setting
+      [calendarOptions]="calendarOptions"
+      [currentEvents]="currentEvents"
+      (toggleWeekends)="handleWeekendsToggle()"
+    ></app-calendar-info-setting>
+  </nz-sider>
+  <nz-layout>
+    <nz-header>
+      <i
+        class="trigger"
+        nz-icon
+        [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+        (click)="isCollapsed = !isCollapsed"
+      ></i>
+    </nz-header>
+    <nz-content>
+      <div class="inner-content">
+        <full-calendar *ngIf='calendarVisible' [options]='calendarOptions'>
+          <ng-template #eventContent let-arg>
+            <b>{{ arg.timeText }}</b>
+            <i>{{ arg.event.title }}</i>
+          </ng-template>
+        </full-calendar>
+      </div>
+    </nz-content>
+    <nz-footer>Test with Angular - Missions Calendar</nz-footer>
+  </nz-layout>
+</nz-layout> -->
