@@ -12,6 +12,7 @@ import { INITIAL_EVENTS, createEventId } from 'src/shared/utils/event-utils';
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent {
+  drawerVisible = true;
   calendarVisible = true;
   calendarOptions: CalendarOptions = {
     plugins: [
@@ -83,4 +84,12 @@ export class CalendarComponent {
     this.changeDetector.detectChanges();
   }
 
+  closeDrawer() {
+    this.drawerVisible = false;
+  }
+
+  openDrawer() {
+    this.drawerVisible = true;
+    console.log(this.drawerVisible)
+  }
 }
