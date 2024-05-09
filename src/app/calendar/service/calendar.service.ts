@@ -44,6 +44,7 @@ export class CalendarService {
   addTask(task: Task) {
     task.employee = EMPLOYEE_LIST.find(emp => emp.id === task.employeId);
     const tasks = [...this.currentTasks, task];
+    console.log(this.currentTasks, tasks)
     return this.calendarTasks$.next(tasks);
   }
 

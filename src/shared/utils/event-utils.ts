@@ -1,6 +1,7 @@
 import { EventInput } from '@fullcalendar/core';
 import { Employee } from '../models/employee';
 import { Task } from '../models/task';
+import { EventImpl } from '@fullcalendar/core/internal';
 // import * as fs from 'fs';
 
 // const jsonData = fs.readFileSync('../data/task.json', 'utf-8');
@@ -13,7 +14,7 @@ export const INITIAL_EVENTS: Task[] = [
     "id": "1",
     "title": "Add dashboard on Home page",
     "description": "Some description about the dashboard and features on it",
-    "color": "red",
+    "color": "#ff0000",
     "start": "2024-05-04",
     "end": "2024-05-09",
     "employeId": 1,
@@ -27,7 +28,7 @@ export const INITIAL_EVENTS: Task[] = [
     "id": "2",
     "title": "Add new About page",
     "description": "Some description about the About page and the informations on it",
-    "color": "green",
+    "color": "#efab12",
     "employeId": 2,
     "start": "2024-05-05",
     "end": "2024-05-06",
@@ -38,13 +39,13 @@ export const INITIAL_EVENTS: Task[] = [
     }
   },
   {
-    "id": "3",
-    "title": "Add a color for each event in calendar",
-    "description": "Some description about the new calendar",
-    "color": "grey",
-    "employeId": 3,
-    "start": "2024-05-09",
-    "end": "2024-05-09",
+    "id": "4",
+    "title": "A very big change",
+    "description": "There is a bug in a component called component",
+    "color": "#00f900",
+    "employeId": 2,
+    "start": "2024-05-01",
+    "end": "2024-05-03",
     "employee": {
       "id": 3,
       "name": "Michelle",
@@ -73,4 +74,17 @@ export const EMPLOYEE_LIST: Employee[] = [
 
 export function createEventId() {
   return String(eventGuid++);
+}
+
+export function convertEventToTask(event: EventImpl): Task {
+  return {
+    id: event.id,
+    start: event.startStr,
+    end: event.endStr,
+    title: event.title,
+    description: event.extendedProps["description"],
+    color: event.backgroundColor || event.borderColor || event.textColor || '',
+    employeId: event.extendedProps["employeId"],
+    employee: event.extendedProps["employee"]
+  };
 }

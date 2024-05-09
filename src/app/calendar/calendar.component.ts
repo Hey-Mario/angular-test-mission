@@ -4,10 +4,11 @@ import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import { EMPLOYEE_LIST, createEventId } from 'src/shared/utils/event-utils';
+import { EMPLOYEE_LIST, convertEventToTask, createEventId } from 'src/shared/utils/event-utils';
 import { CalendarService } from './service/calendar.service';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import { map } from 'rxjs';
+import { Task } from 'src/shared/models/task';
 
 @Component({
   selector: 'app-calendar',
@@ -16,9 +17,6 @@ import { map } from 'rxjs';
 })
 export class CalendarComponent {
   @ViewChild(FullCalendarComponent) fullcalendar!: FullCalendarComponent;
-
-  isCollapsed = false;
-  isAddTaskVisible = false;
   calendarOptions: CalendarOptions = {
     plugins: [
       interactionPlugin,
@@ -29,7 +27,7 @@ export class CalendarComponent {
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+      right: 'dayGridMonth,listWeek'
     },
     initialView: 'dayGridMonth',
     weekends: true,
@@ -42,17 +40,18 @@ export class CalendarComponent {
     eventsSet: this.handleEvents.bind(this),
     eventChange: this.handleEventChange.bind(this),
     eventRemove: this.handleEventDeletion.bind(this),
-    /* you can update a remote database when these fire:
-    eventAdd:
-    eventChange:
-    eventRemove:
-    */
   };
+
+  isCollapsed = false;
+  isModalVisible = false;
+  showTooltipFlag: boolean = false;
+
   currentTasks: EventApi[] = [];
+
+  selectedTask: Task | null = null;
   lastSelectInfo: DateSelectArg | null = null;
   tooltipContent: string = "";
   eventElementRef: ElementRef | null = null;
-  showTooltipFlag: boolean = false;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -66,14 +65,16 @@ export class CalendarComponent {
   }
 
   handleDateSelect(selectInfo: DateSelectArg) {
-    this.isAddTaskVisible = true;
+    this.isModalVisible = true;
     this.lastSelectInfo = selectInfo;
   }
 
   handleEventClick(clickInfo: EventClickArg) {
-    if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      clickInfo.event.remove();
-    }
+    // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+    //   clickInfo.event.remove();
+    // }
+    this.selectedTask = convertEventToTask(clickInfo.event);
+    this.isModalVisible = true;
   }
 
   handleEvents(events: EventApi[]) {
@@ -106,7 +107,8 @@ export class CalendarComponent {
   }
 
   closeTaskCreate() {
-    this.isAddTaskVisible = false;
+    this.isModalVisible = false;
+    this.selectedTask = null;
     if (this.lastSelectInfo) {
       const calendarApi = this.lastSelectInfo.view.calendar;
       calendarApi.unselect(); // clear date selection

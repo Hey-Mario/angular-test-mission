@@ -57,14 +57,15 @@
 </div>
 
 <nz-modal
-  [(nzVisible)]="isAddTaskVisible"
-  nzTitle="The first Modal"
+  [(nzVisible)]="isModalVisible"
+  nzTitle="Create/Edit Task"
   (nzOnCancel)="closeTaskCreate()"
   [nzFooter]="null"
 >
   <ng-container *nzModalContent>
     <app-create-task
       [selectInfo]="lastSelectInfo"
+      [task]="selectedTask"
       (close)="closeTaskCreate()"
     ></app-create-task>
   </ng-container>

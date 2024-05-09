@@ -5,6 +5,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable } from 'rxjs';
 import { CalendarService } from 'src/app/calendar/service/calendar.service';
 import { Employee } from 'src/shared/models/employee';
+import { Task } from 'src/shared/models/task';
 import { EmployeeService } from 'src/shared/services/employee.service';
 import { createEventId } from 'src/shared/utils/event-utils';
 
@@ -16,6 +17,14 @@ interface IFormValue {
   startEndDate: Date[],
 }
 
+interface IFormDefaultValue {
+  title: string | null,
+  description: string | null,
+  color: string | null,
+  employeId: number | null,
+  startEndDate: (string | Date | undefined)[],
+}
+
 @Component({
   selector: 'app-create-task',
   templateUrl: './create-task.component.html',
@@ -23,33 +32,51 @@ interface IFormValue {
 })
 export class CreateTaskComponent implements OnInit {
   @Input() selectInfo: DateSelectArg | null = null;
+  @Input() task: Task | null = null;
   @Output() close = new EventEmitter();
 
   form!: FormGroup;
-  employees$: Observable<Employee[]> = this.employeeService.getAllEmployee(); // Assuming you have an array of employees
+  employees$: Observable<Employee[]> = this.employeeService.getAllEmployee();
 
   constructor(
     private fb: FormBuilder,
     private message: NzMessageService,
     private employeeService: EmployeeService,
     private calendarService: CalendarService,
-  ) { }
+  ) {
+    this.form = this.fb.group({
+      title: [null, Validators.required],
+      description: [null, Validators.required],
+      color: [null, Validators.required],
+      employeId: [null, Validators.required],
+      startEndDate: [null, Validators.required],
+    })
+  }
 
   ngOnInit(): void {
     this.initForm();
   }
 
   initForm(): void {
-    const defaultStart = this.selectInfo?.startStr;
-    const defaultEnd = this.selectInfo?.endStr;
-    const defaultColor = "#ff0000"
-    this.form = this.fb.group({
-      title: [null, Validators.required],
-      description: [null],
-      color: [defaultColor, Validators.required],
-      employeId: [null, Validators.required],
-      startEndDate: [[defaultStart, defaultEnd], Validators.required],
-    });
+    let defaultValue: IFormDefaultValue = {
+      title: null,
+      description: null,
+      employeId: null,
+      color: "#ff0000",
+      startEndDate: [this.selectInfo?.startStr, this.selectInfo?.endStr]
+    }
+    if (this.task) {
+      const { start, end, employee, ...task } = this.task
+      defaultValue = {
+        ...defaultValue,
+        ...task,
+        startEndDate: [start, end],
+      }
+    }
+    console.log(defaultValue)
+    this.form.patchValue({
+      ...defaultValue
+    })
   }
 
   triggerClose() {
