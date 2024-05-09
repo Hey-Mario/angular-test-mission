@@ -4,10 +4,9 @@ import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import { EMPLOYEE_LIST, convertEventToTask, createEventId } from 'src/shared/utils/event-utils';
+import { convertEventToTask } from 'src/shared/utils/event-utils';
 import { CalendarService } from './service/calendar.service';
 import { FullCalendarComponent } from '@fullcalendar/angular';
-import { map } from 'rxjs';
 import { Task } from 'src/shared/models/task';
 
 @Component({
@@ -39,7 +38,6 @@ export class CalendarComponent {
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this),
     eventChange: this.handleEventChange.bind(this),
-    eventRemove: this.handleEventDeletion.bind(this),
   };
 
   isCollapsed = false;
@@ -70,9 +68,6 @@ export class CalendarComponent {
   }
 
   handleEventClick(clickInfo: EventClickArg) {
-    // if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-    //   clickInfo.event.remove();
-    // }
     this.selectedTask = convertEventToTask(clickInfo.event);
     this.isModalVisible = true;
   }
@@ -80,10 +75,6 @@ export class CalendarComponent {
   handleEvents(events: EventApi[]) {
     this.currentTasks = events;
     this.changeDetector.detectChanges();
-  }
-
-  handleEventDeletion(arg: EventRemoveArg) {
-    this.service.removeTask(arg.event.id);
   }
 
   handleEventChange(arg: EventRemoveArg) {

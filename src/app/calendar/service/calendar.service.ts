@@ -13,7 +13,12 @@ export class CalendarService {
 
   constructor(
     private employeeService: EmployeeService
-  ) { }
+  ) {
+    const tasks = localStorage.getItem("tasks");
+    if(tasks) {
+      this.setTasks(JSON.parse(tasks))
+    }
+  }
 
   getAllTasks() {
     const obs1 = this.calendarTasks$.asObservable()
@@ -60,5 +65,9 @@ export class CalendarService {
       this.currentTasks[taskIndex] = updatedTask;
       this.calendarTasks$.next([...this.currentTasks]);
     }
+  }
+
+  setTasks(tasks: Task[]) {
+    this.calendarTasks$.next(tasks);
   }
 }
