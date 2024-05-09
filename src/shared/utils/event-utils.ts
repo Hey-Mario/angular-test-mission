@@ -1,4 +1,5 @@
 import { EventInput } from '@fullcalendar/core';
+import { Employee } from '../models/employee';
 // import * as fs from 'fs';
 
 // const jsonData = fs.readFileSync('../data/task.json', 'utf-8');
@@ -35,6 +36,24 @@ export const INITIAL_EVENTS: EventInput[] = [
     "end": "2024-05-09"
   }
 ];
+
+export const EMPLOYEE_LIST: Employee[] = [
+  {
+    "id": 1,
+    "name": "John Doe",
+    "img": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "id": 2,
+    "name": "Sarah Lena",
+    "img": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "id": 3,
+    "name": "Michelle",
+    "img": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+]
 
 export function createEventId() {
   return String(eventGuid++);

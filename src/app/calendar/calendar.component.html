@@ -24,7 +24,10 @@
   </nz-drawer>
 
   <div class='calendar-container'>
-    <full-calendar [options]='calendarOptions'>
+    <full-calendar
+      [options]='calendarOptions'
+      [events]="events | async"
+    >
       <ng-template #eventContent let-arg>
         <b>{{ arg.timeText }}</b>
         <i>{{ arg.event.title }}</i>
@@ -33,33 +36,13 @@
   </div>
 </div>
 
-<!-- <nz-layout>
-  <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
-    <app-calendar-info-setting
-      [calendarOptions]="calendarOptions"
-      [currentEvents]="currentEvents"
-      (toggleWeekends)="handleWeekendsToggle()"
-    ></app-calendar-info-setting>
-  </nz-sider>
-  <nz-layout>
-    <nz-header>
-      <i
-        class="trigger"
-        nz-icon
-        [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
-        (click)="isCollapsed = !isCollapsed"
-      ></i>
-    </nz-header>
-    <nz-content>
-      <div class="inner-content">
-        <full-calendar *ngIf='calendarVisible' [options]='calendarOptions'>
-          <ng-template #eventContent let-arg>
-            <b>{{ arg.timeText }}</b>
-            <i>{{ arg.event.title }}</i>
-          </ng-template>
-        </full-calendar>
-      </div>
-    </nz-content>
-    <nz-footer>Test with Angular - Missions Calendar</nz-footer>
-  </nz-layout>
-</nz-layout> -->
+<nz-modal
+  [(nzVisible)]="isAddTaskVisible"
+  nzTitle="The first Modal"
+  (nzOnCancel)="closeTaskCreate()"
+  [nzFooter]="null"
+>
+  <ng-container *nzModalContent>
+    <app-create-task></app-create-task>
+  </ng-container>
+</nz-modal>

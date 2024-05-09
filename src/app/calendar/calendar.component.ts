@@ -4,7 +4,8 @@ import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import { INITIAL_EVENTS, createEventId } from 'src/shared/utils/event-utils';
+import { createEventId } from 'src/shared/utils/event-utils';
+import { CalendarService } from './service/calendar.service';
 
 @Component({
   selector: 'app-calendar',
@@ -12,7 +13,8 @@ import { INITIAL_EVENTS, createEventId } from 'src/shared/utils/event-utils';
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent {
-  isCollapsed = true;
+  isCollapsed = false;
+  isAddTaskVisible = false;
   calendarOptions: CalendarOptions = {
     plugins: [
       interactionPlugin,
@@ -26,7 +28,6 @@ export class CalendarComponent {
       right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
     },
     initialView: 'dayGridMonth',
-    initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
     weekends: true,
     editable: true,
     selectable: true,
@@ -34,7 +35,7 @@ export class CalendarComponent {
     dayMaxEvents: true,
     select: this.handleDateSelect.bind(this),
     eventClick: this.handleEventClick.bind(this),
-    eventsSet: this.handleEvents.bind(this)
+    eventsSet: this.handleEvents.bind(this),
     /* you can update a remote database when these fire:
     eventAdd:
     eventChange:
@@ -43,7 +44,10 @@ export class CalendarComponent {
   };
   currentTasks: EventApi[] = [];
 
-  constructor(private changeDetector: ChangeDetectorRef) {
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    private service: CalendarService
+  ) {
   }
 
   handleWeekendsToggle() {
@@ -52,20 +56,21 @@ export class CalendarComponent {
   }
 
   handleDateSelect(selectInfo: DateSelectArg) {
-    const title = prompt('Please enter a new title for your event');
-    const calendarApi = selectInfo.view.calendar;
+    this.isAddTaskVisible = true;
+    // const title = prompt('Please enter a new title for your event');
+    // const calendarApi = selectInfo.view.calendar;
 
-    calendarApi.unselect(); // clear date selection
+    // calendarApi.unselect(); // clear date selection
 
-    if (title) {
-      calendarApi.addEvent({
-        id: createEventId(),
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay
-      });
-    }
+    // if (title) {
+    //   calendarApi.addEvent({
+    //     id: createEventId(),
+    //     title,
+    //     start: selectInfo.startStr,
+    //     end: selectInfo.endStr,
+    //     allDay: selectInfo.allDay
+    //   });
+    // }
   }
 
   handleEventClick(clickInfo: EventClickArg) {
@@ -85,6 +90,13 @@ export class CalendarComponent {
 
   openDrawer() {
     this.isCollapsed = true;
-    console.log(this.isCollapsed)
+  }
+
+  closeTaskCreate() {
+    this.isAddTaskVisible = false;
+  }
+
+  get events() {
+    return this.service.getAllTasks()
   }
 }
