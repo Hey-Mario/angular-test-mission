@@ -25,18 +25,23 @@
   <div class='calendar-container'>
       <full-calendar
       [options]='calendarOptions'
-      [events]="events | async"
+      [events]="events$ | async"
       >
         <ng-template #eventContent let-arg>
-            <i>{{ arg.event.title }}</i>
-
-          <!-- <a
+          <span
             nz-tooltip
-            [nzTooltipTitle]="arg.event.extendedProps['description']"
+            [nzTooltipTitle]="descriptionTemplate"
+            [nzTooltipTitleContext]="{ $implicit: arg.event.extendedProps }"
           >
-            <img [src]="arg.event.extendedProps['employee']?.img" alt="pic">
+            <img class="event-img" [src]="arg.event.extendedProps['employee']?.img" alt="pic">
             <i>{{ arg.event.title }}</i>
-          </a> -->
+          </span>
+          <ng-template #descriptionTemplate let-thing>
+            <div class="custom-tooltip-content">
+              <img class="event-img-tooltip" [src]="thing['employee']?.img" alt="pic">
+              <span>{{ thing['description'] }}</span>
+            </div>
+          </ng-template>
         </ng-template>
       </full-calendar>
   </div>

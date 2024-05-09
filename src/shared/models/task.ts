@@ -1,3 +1,5 @@
+import { Employee } from "./employee";
+
 export interface Task {
   id: string;
   start: Date | string;
@@ -6,4 +8,5 @@ export interface Task {
   description: string;
   color: string;
   employeId: number;
+  employee?: Employee;
 }

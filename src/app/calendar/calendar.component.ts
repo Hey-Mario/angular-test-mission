@@ -4,9 +4,10 @@ import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import { createEventId } from 'src/shared/utils/event-utils';
+import { EMPLOYEE_LIST, createEventId } from 'src/shared/utils/event-utils';
 import { CalendarService } from './service/calendar.service';
 import { FullCalendarComponent } from '@fullcalendar/angular';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-calendar',
@@ -95,7 +96,17 @@ export class CalendarComponent {
     }
   }
 
-  get events() {
+  get events$() {
     return this.service.getAllTasks()
+    // .pipe(map((tasks) => {
+    //   console.log(tasks.map(task => {
+    //       const employee = EMPLOYEE_LIST.find(emp => emp.id === task.employeId)
+    //       return { ...task, employeeName: employee?.name, employeeImg: employee?.img }
+    //     }))
+    //   return tasks.map(task => {
+    //     const employee = EMPLOYEE_LIST.find(emp => emp.id === task.employeId)
+    //     return { ...task, employeeName: employee?.name, employeeImg: employee?.img }
+    //   })
+    // }))
   }
 }
