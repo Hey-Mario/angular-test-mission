@@ -73,7 +73,6 @@ export class CreateTaskComponent implements OnInit {
         startEndDate: [start, end],
       }
     }
-    console.log(defaultValue)
     this.form.patchValue({
       ...defaultValue
     })
@@ -88,14 +87,27 @@ export class CreateTaskComponent implements OnInit {
       this.form.controls[i].markAsDirty();
       this.form.controls[i].updateValueAndValidity();
     }
-    if (this.form.valid) {
-      const newTask = this.buildTaskPayload(this.form.value);
+    if (!this.form.valid) {
+      this.message.error('Form validation failed. Please check the fields.');
+      return;
+    }
+
+    const newTask = this.buildTaskPayload(this.form.value);
+    if (this.task) {
+      this.calendarService.updateTask(this.task.id, newTask);
+      this.message.success('Task updated successfully!');
+    } else {
       this.calendarService.addTask(newTask);
       this.message.success('Task created successfully!');
-      this.triggerClose();
-    } else {
-      this.message.error('Form validation failed. Please check the fields.');
     }
+
+    this.triggerClose();
+  }
+
+  removeTask() {
+    if(this.task)
+      this.calendarService.removeTask(this.task.id)
+    this.triggerClose();
   }
 
   buildTaskPayload(data: IFormValue) {

@@ -54,14 +54,11 @@ export class CalendarService {
   }
 
   updateTask(taskId: string, data: Partial<Task>) {
-    const task = this.currentTasks.find(task => task.id === taskId)
-    // const newTask = {
-    //   ...task,
-    //   ...data
-    // }
-    if (task) {
-      Object.assign(task, data)
+    const taskIndex = this.currentTasks.findIndex(task => task.id === taskId);
+    if (taskIndex !== -1) {
+      const updatedTask = { ...this.currentTasks[taskIndex], ...data };
+      this.currentTasks[taskIndex] = updatedTask;
+      this.calendarTasks$.next([...this.currentTasks]);
     }
-    return this.calendarTasks$.next(this.currentTasks);
   }
 }

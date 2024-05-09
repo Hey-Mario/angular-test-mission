@@ -36,8 +36,17 @@
         ></nz-range-picker>
       </nz-form-item>
       <div class="form-btn">
-        <button nz-button nzType="default" (click)="triggerClose()">Cancel</button>
-        <button nz-button nzType="primary" [disabled]="!form.valid" (click)="submitForm()">Submit</button>
+        <button *ngIf="task; else cancelTmpl" nz-button nzType="primary" nzDanger (click)="removeTask()">
+          Delete
+        </button>
+        <ng-template #cancelTmpl>
+          <button nz-button nzType="default" (click)="triggerClose()">
+            Cancel
+          </button>
+        </ng-template>
+        <button nz-button nzType="primary" [disabled]="!form.valid" (click)="submitForm()">{{
+          task ? "Edit" : "Submit"
+        }}</button>
       </div>
     </nz-form>
   </ng-container>

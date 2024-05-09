@@ -43,7 +43,9 @@
             [nzTooltipTitleContext]="{ $implicit: arg.event.extendedProps }"
           >
             <img class="event-img" [src]="arg.event.extendedProps['employee']?.img" alt="pic">
-            <i class="custom-event-title">{{ arg.event.title }}</i>
+            <i class="custom-event-title">
+              {{ arg.event.extendedProps['employee']?.name }}: {{ arg.event.title }}
+            </i>
           </span>
           <ng-template #descriptionTemplate let-thing>
             <div class="custom-tooltip-content">
