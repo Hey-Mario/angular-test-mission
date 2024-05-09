@@ -14,6 +14,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
     CreateTaskComponent,
     NzModalModule,
     NzIconModule,
+    NzToolTipModule,
   ],
   imports: [
     CommonModule,
@@ -41,7 +43,8 @@ import { NzInputModule } from 'ng-zorro-antd/input';
     NzSelectModule,
     NzInputModule,
     NzModalModule,
-    NzDatePickerModule
+    NzDatePickerModule,
+    NzToolTipModule,
   ],
   providers: [NzMessageService]
 })

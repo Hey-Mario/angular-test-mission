@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, combineLatest, map } from 'rxjs';
+import { Employee } from 'src/shared/models/employee';
 import { Task } from 'src/shared/models/task';
+import { EmployeeService } from 'src/shared/services/employee.service';
 import { INITIAL_EVENTS } from 'src/shared/utils/event-utils';
 
 @Injectable({
@@ -9,17 +11,30 @@ import { INITIAL_EVENTS } from 'src/shared/utils/event-utils';
 export class CalendarService {
   private calendarTasks$ = new BehaviorSubject(INITIAL_EVENTS);
 
-  constructor() { }
+  constructor(
+    private employeeService: EmployeeService
+  ) { }
 
   getAllTasks() {
-    return this.calendarTasks$.asObservable();
+    const obs1 = this.calendarTasks$.asObservable();
+    const obs2 = this.employeeService.getAllEmployee();
+    return combineLatest([obs1, obs2]).pipe(
+      map(([tasks, employees]) => this.buildTasksWithEmployee(tasks, employees))
+    );
+  }
+
+  buildTasksWithEmployee(tasks: Task[], employees: Employee[]) {
+    return tasks.map(task => {
+      const employee = employees.find(emp => emp.id === task.employeId)
+      return {...task, employee}
+    })
   }
 
   get currentTasks(){
     return this.calendarTasks$.value
   }
 
-  addTask(task: Partial<Task>) {
+  addTask(task: Task) {
     const tasks = [...this.currentTasks, task]
     return this.calendarTasks$.next(tasks);
   }

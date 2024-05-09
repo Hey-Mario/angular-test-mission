@@ -23,15 +23,22 @@
   </nz-drawer>
 
   <div class='calendar-container'>
-    <full-calendar
+      <full-calendar
       [options]='calendarOptions'
       [events]="events | async"
-    >
-      <ng-template #eventContent let-arg>
-        <b>{{ arg.timeText }}</b>
-        <i>{{ arg.event.title }}</i>
-      </ng-template>
-    </full-calendar>
+      >
+        <ng-template #eventContent let-arg>
+            <i>{{ arg.event.title }}</i>
+
+          <!-- <a
+            nz-tooltip
+            [nzTooltipTitle]="arg.event.extendedProps['description']"
+          >
+            <img [src]="arg.event.extendedProps['employee']?.img" alt="pic">
+            <i>{{ arg.event.title }}</i>
+          </a> -->
+        </ng-template>
+      </full-calendar>
   </div>
 </div>
 
@@ -42,6 +49,9 @@
   [nzFooter]="null"
 >
   <ng-container *nzModalContent>
-    <app-create-task></app-create-task>
+    <app-create-task
+      [selectInfo]="lastSelectInfo"
+      (close)="closeTaskCreate()"
+    ></app-create-task>
   </ng-container>
 </nz-modal>

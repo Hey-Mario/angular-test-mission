@@ -1,10 +1,12 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { DateSelectArg } from '@fullcalendar/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable } from 'rxjs';
 import { CalendarService } from 'src/app/calendar/service/calendar.service';
 import { Employee } from 'src/shared/models/employee';
 import { EmployeeService } from 'src/shared/services/employee.service';
+import { createEventId } from 'src/shared/utils/event-utils';
 
 interface IFormValue {
   title: string,
@@ -20,9 +22,11 @@ interface IFormValue {
   styleUrls: ['./create-task.component.scss']
 })
 export class CreateTaskComponent implements OnInit {
+  @Input() selectInfo: DateSelectArg | null = null;
+  @Output() close = new EventEmitter();
+
   form!: FormGroup;
   employees$: Observable<Employee[]> = this.employeeService.getAllEmployee(); // Assuming you have an array of employees
-  @Output() close = new EventEmitter<boolean>();
 
   constructor(
     private fb: FormBuilder,
@@ -36,19 +40,20 @@ export class CreateTaskComponent implements OnInit {
   }
 
   initForm(): void {
-    const currentDate = new Date();
+    const defaultStart = this.selectInfo?.startStr;
+    const defaultEnd = this.selectInfo?.endStr;
     const defaultColor = "#ff0000"
     this.form = this.fb.group({
       title: [null, Validators.required],
       description: [null],
       color: [defaultColor, Validators.required],
       employeId: [null, Validators.required],
-      startEndDate: [[currentDate, currentDate], Validators.required],
+      startEndDate: [[defaultStart, defaultEnd], Validators.required],
     });
   }
 
-  cancel() {
-    this.close.emit(false);
+  triggerClose() {
+    this.close.emit();
   }
 
   submitForm(): void {
@@ -61,6 +66,7 @@ export class CreateTaskComponent implements OnInit {
       console.log(newTask);
       this.calendarService.addTask(newTask);
       this.message.success('Task created successfully!');
+      this.triggerClose();
     } else {
       this.message.error('Form validation failed. Please check the fields.');
     }
@@ -72,6 +78,7 @@ export class CreateTaskComponent implements OnInit {
       ...otherData,
       start: startEndDate[0],
       end: startEndDate[1],
+      id: createEventId()
     }
     return payload;
   }

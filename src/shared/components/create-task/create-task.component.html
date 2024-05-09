@@ -36,7 +36,7 @@
         ></nz-range-picker>
       </nz-form-item>
       <div class="form-btn">
-        <button nz-button nzType="default" (click)="cancel()">Cancel</button>
+        <button nz-button nzType="default" (click)="triggerClose()">Cancel</button>
         <button nz-button nzType="primary" [disabled]="!form.valid" (click)="submitForm()">Submit</button>
       </div>
     </nz-form>

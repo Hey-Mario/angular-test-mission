@@ -1,5 +1,6 @@
 import { EventInput } from '@fullcalendar/core';
 import { Employee } from '../models/employee';
+import { Task } from '../models/task';
 // import * as fs from 'fs';
 
 // const jsonData = fs.readFileSync('../data/task.json', 'utf-8');
@@ -7,7 +8,7 @@ import { Employee } from '../models/employee';
 
 let eventGuid = 3;
 
-export const INITIAL_EVENTS: EventInput[] = [
+export const INITIAL_EVENTS: Task[] = [
   {
     "id": "1",
     "title": "Add dashboard on Home page",

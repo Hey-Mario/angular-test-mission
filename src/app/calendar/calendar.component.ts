@@ -1,11 +1,12 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
-import { CalendarOptions, DateSelectArg, EventClickArg, EventApi } from '@fullcalendar/core';
+import { Component, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { CalendarOptions, DateSelectArg, EventClickArg, EventApi, EventHoveringArg } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import { createEventId } from 'src/shared/utils/event-utils';
 import { CalendarService } from './service/calendar.service';
+import { FullCalendarComponent } from '@fullcalendar/angular';
 
 @Component({
   selector: 'app-calendar',
@@ -13,6 +14,8 @@ import { CalendarService } from './service/calendar.service';
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent {
+  @ViewChild('fullcalendar') fullcalendar!: FullCalendarComponent;
+
   isCollapsed = false;
   isAddTaskVisible = false;
   calendarOptions: CalendarOptions = {
@@ -43,6 +46,10 @@ export class CalendarComponent {
     */
   };
   currentTasks: EventApi[] = [];
+  lastSelectInfo: DateSelectArg | null = null;
+  tooltipContent: string = "";
+  eventElementRef: ElementRef | null = null;
+  showTooltipFlag: boolean = false;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -57,20 +64,7 @@ export class CalendarComponent {
 
   handleDateSelect(selectInfo: DateSelectArg) {
     this.isAddTaskVisible = true;
-    // const title = prompt('Please enter a new title for your event');
-    // const calendarApi = selectInfo.view.calendar;
-
-    // calendarApi.unselect(); // clear date selection
-
-    // if (title) {
-    //   calendarApi.addEvent({
-    //     id: createEventId(),
-    //     title,
-    //     start: selectInfo.startStr,
-    //     end: selectInfo.endStr,
-    //     allDay: selectInfo.allDay
-    //   });
-    // }
+    this.lastSelectInfo = selectInfo;
   }
 
   handleEventClick(clickInfo: EventClickArg) {
@@ -94,6 +88,11 @@ export class CalendarComponent {
 
   closeTaskCreate() {
     this.isAddTaskVisible = false;
+    if (this.lastSelectInfo) {
+      const calendarApi = this.lastSelectInfo.view.calendar;
+      calendarApi.unselect(); // clear date selection
+      this.lastSelectInfo = null;
+    }
   }
 
   get events() {

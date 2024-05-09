@@ -1,7 +1,7 @@
 export interface Task {
   id: string;
-  start: Date;
-  end: Date;
+  start: Date | string;
+  end: Date | string;
   title: string;
   description: string;
   color: string;
