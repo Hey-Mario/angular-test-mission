@@ -12,6 +12,15 @@
   object-fit: cover;
 }
 
+.custom-event-title{
+  white-space: normal;
+}
+
+.top-container, .my-calendar{
+  margin: auto;
+  max-width: 1200px;
+}
+
 .custom-tooltip-content {
   display: flex;
   align-items: center;
@@ -23,5 +32,25 @@
     object-fit: cover;
     border-radius: 12px;
     // margin-right: 8px;
+  }
+}
+
+.calendar-container{
+  width: 100%;
+  .my-calendar {
+    padding: 30px;
+    border-radius: 20px;
+    -webkit-box-shadow: 2px 0px 30px 0px rgba(0,0,0,0.04);
+    -moz-box-shadow: 2px 0px 30px 0px rgba(0,0,0,0.04);
+    box-shadow: 2px 0px 30px 0px rgba(0,0,0,0.04);
+  }
+}
+
+::ng-deep{
+  .my-calendar {
+    .fc-col-header-cell a,
+    a.fc-daygrid-day-number{
+      color: black;
+    }
   }
 }

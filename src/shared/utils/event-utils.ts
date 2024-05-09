@@ -41,7 +41,7 @@ export const INITIAL_EVENTS: Task[] = [
     "id": "3",
     "title": "Add a color for each event in calendar",
     "description": "Some description about the new calendar",
-    "color": "yellow",
+    "color": "grey",
     "employeId": 3,
     "start": "2024-05-09",
     "end": "2024-05-09",

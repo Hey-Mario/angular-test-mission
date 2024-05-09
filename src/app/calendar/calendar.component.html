@@ -1,10 +1,12 @@
 <div class='main-container'>
-  <button
-    nz-button
-    nzType="primary"
-    (click)="openDrawer()"
-    class="btn-trigger"
-  >Open Settings</button>
+  <div class="top-container">
+    <button
+      nz-button
+      nzType="primary"
+      (click)="openDrawer()"
+      class="btn-trigger"
+    >Open Settings</button>
+  </div>
 
   <nz-drawer
     [nzClosable]="true"
@@ -24,6 +26,7 @@
 
   <div class='calendar-container'>
       <full-calendar
+      class="my-calendar"
       [options]='calendarOptions'
       [events]="events$ | async"
       >
@@ -34,7 +37,7 @@
             [nzTooltipTitleContext]="{ $implicit: arg.event.extendedProps }"
           >
             <img class="event-img" [src]="arg.event.extendedProps['employee']?.img" alt="pic">
-            <i>{{ arg.event.title }}</i>
+            <i class="custom-event-title">{{ arg.event.title }}</i>
           </span>
           <ng-template #descriptionTemplate let-thing>
             <div class="custom-tooltip-content">
