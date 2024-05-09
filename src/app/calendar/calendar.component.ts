@@ -1,5 +1,5 @@
 import { Component, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
-import { CalendarOptions, DateSelectArg, EventClickArg, EventApi, EventHoveringArg } from '@fullcalendar/core';
+import { CalendarOptions, DateSelectArg, EventClickArg, EventApi, EventHoveringArg, EventRemoveArg } from '@fullcalendar/core';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -15,7 +15,7 @@ import { map } from 'rxjs';
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent {
-  @ViewChild('fullcalendar') fullcalendar!: FullCalendarComponent;
+  @ViewChild(FullCalendarComponent) fullcalendar!: FullCalendarComponent;
 
   isCollapsed = false;
   isAddTaskVisible = false;
@@ -40,6 +40,8 @@ export class CalendarComponent {
     select: this.handleDateSelect.bind(this),
     eventClick: this.handleEventClick.bind(this),
     eventsSet: this.handleEvents.bind(this),
+    eventChange: this.handleEventChange.bind(this),
+    eventRemove: this.handleEventDeletion.bind(this),
     /* you can update a remote database when these fire:
     eventAdd:
     eventChange:
@@ -79,12 +81,28 @@ export class CalendarComponent {
     this.changeDetector.detectChanges();
   }
 
+  handleEventDeletion(arg: EventRemoveArg) {
+    this.service.removeTask(arg.event.id);
+  }
+
+  handleEventChange(arg: EventRemoveArg) {
+    const data = {
+      start: arg.event.startStr,
+      end: arg.event.endStr,
+    }
+    this.service.updateTask(arg.event.id, data)
+  }
+
   closeDrawer() {
     this.isCollapsed = false;
   }
 
   openDrawer() {
     this.isCollapsed = true;
+  }
+
+  saveChanges() {
+    console.log(this.fullcalendar.events)
   }
 
   closeTaskCreate() {

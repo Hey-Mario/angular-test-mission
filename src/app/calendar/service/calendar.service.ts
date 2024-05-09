@@ -42,7 +42,25 @@ export class CalendarService {
   }
 
   addTask(task: Task) {
-    const tasks = [...this.currentTasks, task]
+    task.employee = EMPLOYEE_LIST.find(emp => emp.id === task.employeId);
+    const tasks = [...this.currentTasks, task];
     return this.calendarTasks$.next(tasks);
+  }
+
+  removeTask(taskId: string) {
+    const tasks = this.currentTasks.filter(task => task.id !== taskId)
+    return this.calendarTasks$.next(tasks);
+  }
+
+  updateTask(taskId: string, data: Partial<Task>) {
+    const task = this.currentTasks.find(task => task.id === taskId)
+    // const newTask = {
+    //   ...task,
+    //   ...data
+    // }
+    if (task) {
+      Object.assign(task, data)
+    }
+    return this.calendarTasks$.next(this.currentTasks);
   }
 }

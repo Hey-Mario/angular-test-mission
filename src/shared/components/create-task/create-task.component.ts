@@ -63,7 +63,6 @@ export class CreateTaskComponent implements OnInit {
     }
     if (this.form.valid) {
       const newTask = this.buildTaskPayload(this.form.value);
-      console.log(newTask);
       this.calendarService.addTask(newTask);
       this.message.success('Task created successfully!');
       this.triggerClose();

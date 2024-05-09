@@ -21,6 +21,11 @@
   max-width: 1200px;
 }
 
+.top-container {
+  display: flex;
+  justify-content: space-between;
+}
+
 .custom-tooltip-content {
   display: flex;
   align-items: center;
