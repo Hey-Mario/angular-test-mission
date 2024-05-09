@@ -1,45 +1,44 @@
-<ng-container *ngIf="form">
-  <nz-form nzLayout="vertical" [formGroup]="form" (ngSubmit)="submitForm()">
-    <nz-form-item>
-      <nz-form-label [nzSpan]="6" nzRequired>Title</nz-form-label>
-      <nz-form-control [nzSpan]="14">
-        <input nz-input formControlName="title" />
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label [nzSpan]="6">Description</nz-form-label>
-      <nz-form-control [nzSpan]="14">
-        <textarea nz-input formControlName="description"></textarea>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label [nzSpan]="6">Color</nz-form-label>
-      <nz-form-control [nzSpan]="14">
-        <color-picker [formControlName]="'color'"></color-picker>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label [nzSpan]="6">Employee</nz-form-label>
-      <nz-form-control [nzSpan]="14">
-        <nz-select formControlName="employeId">
-          <nz-option *ngFor="let employee of (employees$ | async)" [nzValue]="employee.id" [nzLabel]="employee.name"></nz-option>
-        </nz-select>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label [nzSpan]="6">Start Date</nz-form-label>
-      <nz-form-control [nzSpan]="8">
-        <nz-date-picker formControlName="start"></nz-date-picker>
-      </nz-form-control>
-      <nz-form-label [nzSpan]="2">End Date</nz-form-label>
-      <nz-form-control [nzSpan]="8">
-        <nz-date-picker formControlName="end"></nz-date-picker>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-control [nzSpan]="14" [nzOffset]="6">
-        <button nz-button nzType="primary" [disabled]="!form.valid">Submit</button>
-      </nz-form-control>
-    </nz-form-item>
-  </nz-form>
-</ng-container>
+<div class="form-container">
+  <ng-container *ngIf="form">
+    <nz-form nzLayout="vertical" [formGroup]="form">
+      <nz-form-item>
+        <nz-form-label nzRequired>Title</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="title" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired>Description</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="description"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired>Employee</nz-form-label>
+        <nz-form-control>
+          <nz-select formControlName="employeId">
+            <nz-option *ngFor="let employee of (employees$ | async)" [nzValue]="employee.id" [nzLabel]="employee.name"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item class="row-view">
+        <nz-form-label nzRequired>Color</nz-form-label>
+        <nz-form-control>
+          <input type="color" formControlName="color">
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired>Timeline</nz-form-label>
+        <nz-range-picker
+          [nzShowTime]="true"
+          [nzAllowClear]="false"
+          formControlName="startEndDate"
+        ></nz-range-picker>
+      </nz-form-item>
+      <div class="form-btn">
+        <button nz-button nzType="default" (click)="cancel()">Cancel</button>
+        <button nz-button nzType="primary" [disabled]="!form.valid" (click)="submitForm()">Submit</button>
+      </div>
+    </nz-form>
+  </ng-container>
+</div>

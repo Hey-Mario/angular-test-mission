@@ -12,7 +12,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateTaskComponent } from './components/create-task/create-task.component';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzMessageService } from 'ng-zorro-antd/message';
-
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzInputModule } from 'ng-zorro-antd/input';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,9 @@ import { NzMessageService } from 'ng-zorro-antd/message';
     NzFormModule,
     ReactiveFormsModule,
     NzSelectModule,
+    NzInputModule,
     NzModalModule,
+    NzDatePickerModule
   ],
   providers: [NzMessageService]
 })
